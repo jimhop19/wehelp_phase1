@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="wehelp_week3.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">My Website</div>
+        <div class="menu ">
+            <div class="item">Item1</div>
+            <div class="item">Item2</div>
+            <div class="item">Item3</div>
+            <div class="item">Item4</div>            
+        </div>
+        <img src="menu_icon.png" alt="icon" class="icon">
+    </div>
+    <div class="main_title">Welcome to MyHome</div>
+    <div class="content">
+        <div class="promo">
+            <script>
+                
+                fetch("https://padax.github.io/taipei-day-trip-resources/taipei-attractions-assignment.json")
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then(response =>{
+                        getAPI(response)
+                    })         
+                    .catch(error =>{
+                        console.log("error");   
+                    })
+                
+                function getAPI(data){
+                    const mainData = data.result.results                    
+                    //create three promotion block
+                    for (let i = 0; i < 3; i++){
+                       //create new <div> tag and items inside <div>
+                        const newPromotionDiv = document.createElement("div");
+                        newPromotionDiv.className = "promotion";
+                        //create <p> tag
+                        const textInPromotion = document.createElement("p")
+                        textInPromotion.textContent = mainData[i].stitle
+                        //create <img> tag
+                        const imgInPromotion = document.createElement("img")
+                        imgInPromotion.src = getFirstPic(i)
+                        //find first pictrue's URL        
+                        function getFirstPic(x){
+                            const regex = new RegExp(".jpg","i");
+                            return (mainData[x].file.substring(0,mainData[x].file.search(regex)+4))
+                        }
+                        newPromotionDiv.appendChild(imgInPromotion);            
+                        newPromotionDiv.appendChild(textInPromotion);
+                        document.querySelector(".promo").appendChild(newPromotionDiv) 
+                    }
+                    //create 12 cards
+                    for (let i = 3; i < 15; i++){
+                       //create new <div> tag and items inside <div>
+                        const newCardDiv = document.createElement("div");
+                        newCardDiv.className = "card";
+                        //create <p> tag
+                        const textInCard = document.createElement("p")
+                        textInCard.textContent = mainData[i].stitle
+                        //create <star> div
+                        const starInCard = document.createElement("div")
+                        starInCard.className = "star"
+                        const starImg = document.createElement("img")
+                        starImg.src = "star.png"
+                        starInCard.appendChild(starImg)
+                        //create <img> tag
+                        const imgInCard = document.createElement("img")
+                        imgInCard.src = getFirstPic(i)
+                        //find first pictrue's URL        
+                        function getFirstPic(x){
+                            const regex = new RegExp(".jpg","i");
+                            return (mainData[x].file.substring(0,mainData[x].file.search(regex)+4))
+                        }
+                        newCardDiv.appendChild(imgInCard);
+                        newCardDiv.appendChild(starInCard)            
+                        newCardDiv.appendChild(textInCard);
+                        document.querySelector(".card_group").appendChild(newCardDiv) 
+                    }                                        
+                }
+             
+            </script>
+
+        </div>
+        <div class="card_group"></div>
+    </div>
+
+    <script>
+        const mobileMenu = document.querySelector('.icon')
+        const menu = document.querySelector('.menu')
+            mobileMenu.addEventListener('click',function(){
+                menu.classList.toggle('open')
+            })
+    </script>
+
+</body>
+</html>
