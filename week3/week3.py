@@ -9,16 +9,15 @@ with request.urlopen(src) as response:
 
 main = data['result']['results']
 
+import re
+
 #attraction.csv
 with open("attraction.csv", mode="w", encoding="utf-8") as file:
     for x in main:
         #find the end of first URL
-        if x["file"].find(".jpg") != -1 :
-            y = x["file"].find(".jpg")+4
-        else:
-            y = x["file"].find(".JPG")+4
+        first_img = re.search("http.*?.jpg",x["file"],re.IGNORECASE).group()       
         #write
-        file.write(x["stitle"] + "," + x["address"][5:8] + "," + x["longitude"] + "," + x['file'][:y] +"\n")
+        file.write(x["stitle"] + "," + x["address"][5:8] + "," + x["longitude"] + "," + first_img +"\n")
 
 #mrt.csv
 
