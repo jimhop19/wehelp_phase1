@@ -1,0 +1,202 @@
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+.header{
+    height: 30px;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.menu{
+    display: flex;
+    justify-content: end;    
+}
+.item{
+    margin-left: 20px;
+}
+.icon{
+    display: none;
+    height: 20px;
+}
+.main_title{
+    background-color:	#D2E9FF;
+    height: 250px;
+    font-size: 40px;
+    text-align: center;
+    line-height: 250px;
+    margin-bottom: 20px;
+}
+.content{
+    width: 1200px;
+    margin: 0 auto;
+}
+.promo{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 20px;
+    grid-template-rows:50px;
+    grid-row-gap: 20px;
+}
+.promotion{
+    display: flex;
+    background-color:	#D2E9FF;
+}
+.promotion img{
+    width: 80px;
+    object-fit: cover;
+}
+.promotion p{
+    margin: auto 10px;
+}
+.card_group{
+    display: grid;
+    margin-top: 20px;
+    grid-template-columns: repeat(6, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+.card{
+    background-color:	rgb(176, 226, 255,0.5);
+    position: relative;
+}
+.star{
+    position: absolute;
+    top: 0;
+    right: 0;      
+}
+.star img{
+    margin: 5px;
+    max-width: 20px;
+    max-height: 20px;
+    display: block;
+}
+.card img{
+    width: 100%;
+    height: 200px;
+    display: block;
+    object-fit: cover;
+}
+.card p{
+    color: white;    
+    text-shadow: 1px 1px  rgb(50,50,50,0.7);
+    background-color: rgb(176, 226, 255,0.5);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 30px;
+    margin: 0px auto;
+}
+.load_more{
+    display: block;
+    box-sizing: border-box;
+    width: 150px;
+    font-size: 15px;    
+    text-align: center;
+    margin: 30px auto;
+    padding: 10px;
+    background-color: rgb(176,226,255,0.6);
+}
+
+@media(max-width:1200px){
+    .content{
+        width: 90%;
+    }
+    .promo{
+        grid-template-columns: 1fr 1fr;
+    }
+    .promotion3{
+        grid-column: 1 / 3;
+    }
+    .card_group{
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media(max-width:600px){
+    .menu{
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100vh;
+        border-left: 1px solid black;
+        background: #fff;
+        z-index: 1;
+    }
+    .open{
+        display: block;
+    }
+    .item{
+        margin: 20px 50px;
+    }
+    .icon{
+        display: block;
+        z-index: 2;
+    }
+    .promo{
+        grid-template-columns: 1fr;
+    }
+    .promotion3{
+        grid-column: 1;
+    }
+    .card_group{
+        grid-template-columns: 1fr;
+    }
+    
+}
+@media(max-width:400px){
+    .main_title{
+        font-size: 10vw;
+    }
+}
