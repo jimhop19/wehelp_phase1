@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Result</h1>            
+        </div>
+        <div class="content">
+            <h2 id="result_number"></h2>            
+        </div>    
+    </div>
+    <script>
+        let integer = {{integer}}
+        result = document.getElementById("result_number")
+        result.innerHTML = integer*integer
+                
+        
+        function appendToURL(newPath) {            
+            
+            let currentURL = window.location.href;                        
+            
+            //Check if user enter by direct URL
+            let index = currentURL.indexOf("/square/")
+            if(index!=-1){
+                return;
+            }
+
+            // Ensure the newPath starts with a forward slash
+            if (!newPath.startsWith('/')) {
+                newPath = '/' + newPath;
+            }
+
+            // Use pushState to modify the URL and add a new history entry
+            window.history.pushState({}, '', currentURL + newPath);
+        }
+        appendToURL(`${integer}`);
+    </script>
+</body>
+</html>

@@ -16,6 +16,7 @@ users = {
 }
 
 
+
 @app.route("/signin", methods=['POST'])
 def signin():
     username = request.form["username"]
@@ -46,6 +47,16 @@ def invalid_account():
 def signout():
     session.pop("username",None)    
     return redirect(url_for("index"))
+
+@app.route("/square", methods=['POST'])
+def square():    
+    integer = int(request.form["integer"])
+    if integer >= 0 :
+        return render_template("square.html",integer=integer)
+@app.route("/square/<int:Number>")
+def square_dynamic(Number):
+    integer = Number    
+    return render_template("square.html", integer=integer)
 
 if __name__=="__main__":
     app.run(port=3000)
