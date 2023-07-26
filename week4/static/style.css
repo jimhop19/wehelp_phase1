@@ -1,0 +1,36 @@
+.container{
+    width: 400px;
+    margin: 20px auto;
+    text-align: center;
+}
+.header{
+    padding:20px;
+    background-color:#2E8693;
+    color: white;
+}
+h1{    
+    line-height: 0px;
+    font-size: 58px;
+}
+h2{
+    font-size: 30x;
+}
+p{
+    line-height: 0px;
+    font-size: 4px;
+}
+.content{
+    padding: 20px;
+    border: 1px solid rgb(0, 0, 0,0.2);
+}
+table{
+    margin: 0px auto 5px;
+}
+input[type="radio"]{
+    margin-top: -0.1px;
+    vertical-align: middle;
+}
+
+.terms{
+    font-size: 1px;    
+}
