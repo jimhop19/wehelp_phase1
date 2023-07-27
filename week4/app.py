@@ -25,8 +25,11 @@ def signin():
         if username in users and password == users[username]["password"]:
             session["username"] = username   
             return redirect(url_for("member"))
-        else:
+        else:            
             return redirect("/error?message=invalid")
+    elif username == "" or password == "":
+        return redirect("/error?message=empty")
+
             
 @app.route("/member")
 def member():    
@@ -36,19 +39,22 @@ def member():
         return render_template("member.html")
 
 @app.route("/error", methods=['GET','POST'])
-def error():    
-    return render_template("error.html")
+def error():
+    message = request.args.get("message")
+    if message == "invalid":
+        errorMessage = "Username or password is not correct"
+        return render_template("error.html",errorMessage = errorMessage)
+    elif message == "empty":
+        errorMessage = "Please enter username and password"
+        return render_template("error.html",errorMessage = errorMessage)
+        
 
 @app.route("/signout", methods=['GET'])
 def signout():
     session.pop("username",None)    
     return redirect(url_for("index"))
 
-# @app.route("/square", methods=['POST'])
-# def square():    
-#     integer = int(request.form["integer"])
-#     if integer >= 0 :
-#         return render_template("square.html",integer=integer)
+
 @app.route("/square/<int:Number>", methods=['GET','POST'])
 def square_dynamic(Number):
     if Number >0 :
