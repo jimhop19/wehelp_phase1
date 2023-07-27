@@ -16,30 +16,14 @@
         </div>    
     </div>
     <script>
-        let integer = {{integer}}
+        // let integer = {{integer}}
+        let indexOfInteger = parseInt(document.location.href.indexOf("/square/"))+8
+        let integer = document.location.href.substring(indexOfInteger)        
         result = document.getElementById("result_number")
         result.innerHTML = integer*integer
                 
         
-        function appendToURL(newPath) {            
-            
-            let currentURL = window.location.href;                        
-            
-            //Check if user enter by direct URL
-            let index = currentURL.indexOf("/square/")
-            if(index!=-1){
-                return;
-            }
-
-            // Ensure the newPath starts with a forward slash
-            if (!newPath.startsWith('/')) {
-                newPath = '/' + newPath;
-            }
-
-            // Use pushState to modify the URL and add a new history entry
-            window.history.pushState({}, '', currentURL + newPath);
-        }
-        appendToURL(`${integer}`);
+        
     </script>
 </body>
 </html>

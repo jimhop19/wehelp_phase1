@@ -14,7 +14,7 @@
         </div>
         <div class="content">
             
-            <form method="post" action="/signin" onsubmit="return check()">
+            <form method="post" id="form" action="" onsubmit="return check()">
                 <table>
                     <tr>
                         <td><label for="username">Username: </label></td>
@@ -31,33 +31,51 @@
                 <input type="submit" id="submit1" value="Login">
             </form>
         </div>
+        <script>
+            form = document.getElementById("form")
+            function check(){
+                if(terms.checked == false){                
+                    return false
+                }else if (username.value == "" | password.value == ""){
+                    form.action = "/error?message=empty"                
+                }else{
+                    form.action = "/signin"
+                }
+            }
+            submit = document.getElementById("submit1")
+            terms = document.getElementById("terms_and_conditions")
+            username = document.getElementById("username")
+            password = document.getElementById("password")
+            submit.addEventListener("click",function(){
+                if (terms.checked == false){
+                    alert('Please check "I agree to the terms and conditions"')                
+                }
+            })                    
+        </script>
         <div class="content">
             <h2>Calculate Square of a Positive Number</h2>
-            <form method="post" action="/square" id="squareForm">
+            <form method="post" action="" id="squareForm" onsubmit="return checkInteger()">
                 <label for="square">Positive integer</label>
-                <input type="text" id="integer" name="integer">
+                <input type="text" id="integer" name="integer" value="">
                 <input type="submit" id="squareSubmit" value="Calculate">
             </form>
         </div>
+        <script>
+            squareForm = document.getElementById("squareForm")
+            integer = document.getElementById("integer")           
+            function checkInteger(){                
+                if (parseInt(integer.value) > 0){                    
+                    squareForm.action = "/square/"+integer.value
+                    
+                }else{
+                    alert("Please enter a positive number");
+                    return false
+                }
+            }
+        </script>
     </div>
     
     
-    <script>
-        function check(){
-            if(terms.checked == false){
-                return false
-            }
-        }
-        submit = document.getElementById("submit1")
-        terms = document.getElementById("terms_and_conditions")
-        submit.addEventListener("click",function(){
-            if (terms.checked == false){
-                alert('Please check "I agree to the terms and conditions"')                
-            }
-        })
-        
-
-
-    </script>
+   
 </body>
 </html>

@@ -26,9 +26,8 @@ def signin():
             session["username"] = username   
             return redirect(url_for("member"))
         else:
-            return redirect(url_for("invalid_account"))
-    else:
-        return redirect(url_for("empty"))
+            return redirect("/error?message=invalid")
+            
 @app.route("/member")
 def member():    
     if "username" not in session:
@@ -36,27 +35,26 @@ def member():
     else:
         return render_template("member.html")
 
-@app.route("//error?message=empty")
-def empty():
-    return render_template("empty.html")
-@app.route("/error?message=invalid_username_or_password")
-def invalid_account():
-    return render_template("invalid_account.html")
+@app.route("/error", methods=['GET','POST'])
+def error():    
+    return render_template("error.html")
 
 @app.route("/signout", methods=['GET'])
 def signout():
     session.pop("username",None)    
     return redirect(url_for("index"))
 
-@app.route("/square", methods=['POST'])
-def square():    
-    integer = int(request.form["integer"])
-    if integer >= 0 :
-        return render_template("square.html",integer=integer)
-@app.route("/square/<int:Number>")
+# @app.route("/square", methods=['POST'])
+# def square():    
+#     integer = int(request.form["integer"])
+#     if integer >= 0 :
+#         return render_template("square.html",integer=integer)
+@app.route("/square/<int:Number>", methods=['GET','POST'])
 def square_dynamic(Number):
-    integer = Number    
-    return render_template("square.html", integer=integer)
+    if Number >0 :
+        return render_template("square.html")
+    else:
+        return redirect(url_for("index"))
 
 if __name__=="__main__":
     app.run(port=3000)

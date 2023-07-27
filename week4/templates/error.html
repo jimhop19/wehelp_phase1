@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>error</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ERROR</h1>            
+        </div>
+        <div class="content">
+            <h2 id="resultMessage">Username or password is not correct!</h2>
+            <script>                                
+                resultMessage = document.getElementById("resultMessage")
+                let newMessage = "Please enter username and password!"
+                if(document.location.href.indexOf("empty")!= -1){ 
+                    resultMessage.innerHTML = newMessage
+                }
+            </script>            
+        </div>    
+    </div>
+</body>
+</html>
