@@ -30,8 +30,7 @@
         <div class="content" id="messageBoard">
             
             <script type="text/javascript">
-                const messageList = {{messageToJS | safe}};                
-                console.log(messageList);
+                const messageList = {{messageToJS | safe}};                                
                 for (i = 0; i < Object.keys(messageList).length; i++){
                     const textLine = document.createElement("p")
                     const nameReveal = document.createElement("b")
