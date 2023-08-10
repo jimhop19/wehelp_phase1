@@ -25,61 +25,59 @@ def signup():
     signup_name = request.form["signup_name"]
     signup_username = request.form["signup_username"]
     signup_password = request.form["signup_password"]
-    if check_if_username_is_in_use(signup_username) == False:
+    if check_username_in_list(signup_username,usernameList) == False:
         signup_to_database(signup_name,signup_username,signup_password)
         return redirect("/")
     else:
         return redirect("/error?message=samename")
 
-def signup_to_database(signup_name,signup_username,signup_password):
-    new_profile_to_database = f"INSERT INTO member(name, username, password) VALUES('{signup_name}', '{signup_username}', '{signup_password}');"
-    cursor.execute(new_profile_to_database)
+def signup_to_database(signup_name,signup_username,signup_password):    
+    cursor.execute("INSERT INTO member(name, username, password) VALUES(%s,%s,%s);",(signup_name,signup_username,signup_password))
     mydb.commit()
 
-def check_if_username_is_in_use(username):
-    username_in_database = f"SELECT * FROM member WHERE username='{username}'"
-    cursor.execute(username_in_database)
-    username_in_database = cursor.fetchall()
-    if username_in_database == []:
-        return False
-    else:
-        return True
 
-
+cursor.execute("SELECT username From member")
+usernameList = cursor.fetchall()
+def check_username_in_list(username, usernameList):        
+    for item in usernameList:
+        if username == item[0]:
+            return True
+    return False
 
 
 @app.route("/signin", methods=['POST'])
 def signin():
     username = request.form["username"]
-    password = request.form["password"]
-    profile_in_database = f"SELECT * FROM member WHERE username='{username}'"
-    cursor.execute(profile_in_database)
-    profile_in_database = cursor.fetchall()
+    password = request.form["password"]    
+    cursor.execute("SELECT username From member")
+    usernameList = cursor.fetchall()
     if username != "" and password != "":
-        if  profile_in_database == []:
+        if check_username_in_list(username,usernameList) == True:
+            cursor.execute("SELECT * FROM member WHERE username = %(username)s", {"username" : username})
+            profile_in_database = cursor.fetchall()
+            if username == profile_in_database[0][2] and password == profile_in_database[0][3]:       
+                session["username"] = username
+                session["name"] = profile_in_database[0][1]
+                session["member_id"] = profile_in_database[0][0]           
+                return redirect(url_for("member"))
+            else:
+                return redirect("/error?message=invalid")
+        else :
             return redirect("/error?message=invalid")    
-        elif username == profile_in_database[0][2] and password == profile_in_database[0][3]:       
-            session["username"] = username
-            session["name"] = profile_in_database[0][1]
-            session["member_id"] = profile_in_database[0][0]           
-            return redirect(url_for("member"))               
-            
+         
     elif username == "" or password == "":
         return redirect("/error?message=empty")
    
             
 @app.route("/member")
-def member():
-    messageBoard = f"SELECT member.name,content FROM message LEFT JOIN member ON message.member_id = member.id "
-    cursor.execute(messageBoard)
+def member():    
+    cursor.execute("SELECT member.name,content FROM message LEFT JOIN member ON message.member_id = member.id ",None)
     messageBoard = cursor.fetchall()
-    print(messageBoard)
     messageJson = []
     for x in range(len(messageBoard)):
         curlyBrace = {}
         curlyBrace[messageBoard[x][0]] = messageBoard[x][1]
-        messageJson.append(curlyBrace)
-    print(messageJson)
+        messageJson.append(curlyBrace)    
     
     
     if "username" not in session:
@@ -90,9 +88,8 @@ def member():
 @app.route("/createMessage", methods=['POST'])
 def createMessage():
     leaveMessage = request.form["leaveMessage"]
-    memberId = session["member_id"]
-    new_message_to_database = f"INSERT INTO message(member_id, content) VALUES('{memberId}', '{leaveMessage}');"
-    cursor.execute(new_message_to_database)
+    memberId = session["member_id"]    
+    cursor.execute("INSERT INTO message(member_id, content) VALUES(%s, %s);",(memberId,leaveMessage))
     mydb.commit()
     return redirect("/member")
 
