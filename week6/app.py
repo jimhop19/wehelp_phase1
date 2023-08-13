@@ -35,9 +35,9 @@ def signup_to_database(signup_name,signup_username,signup_password):
     cursor.execute("INSERT INTO member(name, username, password) VALUES(%s,%s,%s);",(signup_name,signup_username,signup_password))
     mydb.commit()
 
-
 cursor.execute("SELECT username From member")
 usernameList = cursor.fetchall()
+
 def check_username_in_list(username, usernameList):        
     for item in usernameList:
         if username == item[0]:
@@ -70,15 +70,17 @@ def signin():
    
             
 @app.route("/member")
-def member():    
-    cursor.execute("SELECT member.name,content FROM message LEFT JOIN member ON message.member_id = member.id ",None)
+def member():             
+    cursor.execute("SELECT member.name,content,message.id FROM message LEFT JOIN member ON message.member_id = member.id ",None)
     messageBoard = cursor.fetchall()
     messageJson = []
     for x in range(len(messageBoard)):
         curlyBrace = {}
-        curlyBrace[messageBoard[x][0]] = messageBoard[x][1]
-        messageJson.append(curlyBrace)    
-    
+        curlyBrace["name"] = messageBoard[x][0]
+        curlyBrace["content"] = messageBoard[x][1]
+        curlyBrace["id"] = messageBoard[x][2]
+        messageJson.append(curlyBrace)
+            
     
     if "username" not in session:
         return redirect(url_for("index"))
@@ -90,6 +92,14 @@ def createMessage():
     leaveMessage = request.form["leaveMessage"]
     memberId = session["member_id"]    
     cursor.execute("INSERT INTO message(member_id, content) VALUES(%s, %s);",(memberId,leaveMessage))
+    mydb.commit()    
+    return redirect("/member")
+    
+
+@app.route("/deleteMessage", methods = ["POST"])
+def deleteMessage():
+    messageId = request.get_json("/deleteMessage")["id"]    
+    cursor.execute("DELETE FROM message WHERE id = %(id)s ", {"id":messageId})
     mydb.commit()
     return redirect("/member")
 
@@ -112,10 +122,11 @@ def signout():
     session.pop("username",None) 
     session.pop("name",None)
     session.pop("member_id",None)   
-    return redirect(url_for("index"))
+    return redirect("/")
 
 
 
 
 if __name__=="__main__":
     app.run(port=3000)
+       
