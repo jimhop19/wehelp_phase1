@@ -32,6 +32,15 @@ p{
 .content p{
     line-height: 14px;
 }
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48;
+    vertical-align: -1px;
+    cursor: pointer;
+}
 table{
     margin: 0px auto 5px;
     text-align: left;    
