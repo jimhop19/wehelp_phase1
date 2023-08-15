@@ -131,9 +131,9 @@ def apiMember():
         newName = request.get_json()
         currentUsername = session["username"]        
 
-        mydbConnection = mydb.get_connection()
-        cursor = mydbConnection.cursor()
         try:
+            mydbConnection = mydb.get_connection()
+            cursor = mydbConnection.cursor()
             cursor.execute("UPDATE member SET name = %s WHERE username = %s",(newName["name"],currentUsername))
             mydbConnection.commit()
             session["name"] = newName["name"]               
