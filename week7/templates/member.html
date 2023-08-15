@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome</h1>
+            <p>This is member page</p>
+        </div>
+        <div class="content">
+            <h2>Congratulation! <span id = "congratulationMessageName">{{name}}</span>, you have successfully signed in!</h2>        
+            <a href="/signout">Signout</a>
+        </div>
+        <div class="content" id = "searchNameSession">            
+                <h3>Retrieve Name</h3>                 
+                    <label for="searchName">Username: </label>                   
+                    <input type="text" id="searchName" name="searchName" >
+                    <button id="submit1"  value="Submit" onclick="searchNameInDatabase()" >
+                        <p>Submit</p>
+                    </button>
+                <p id = "searchNameResult"></p>            
+        </div>
+        <script>
+            const searchName = document.getElementById("searchName")
+            const searchNameResult = document.getElementById("searchNameResult")
+            function searchNameInDatabase(){                
+                fetch("/api/member"+"?username="+ searchName.value)
+                    .then(response => {                        
+                        return response.json();
+                    })
+                    .then( data =>{                    
+                        let resultData = data.data                        
+                        if (resultData != null){
+                            searchNameResult.innerText = resultData.name
+                        }else{
+                            searchNameResult.innerText = ""
+                        }
+                        console.log(data)
+                    })                
+            }
+            
+        </script>
+        <div class="content" id = "chagngeNameSession">            
+            <h3>Change Your Name</h3>                 
+                <label for="changeName">New Name: </label>                   
+                <input type="text" id="changeName" name="changeName" >
+                <button id="submit2"  onclick="changeNameInDatabase()" >
+                    <p>Submit</p>
+                </button>
+            <p id = "changeNameResult"></p>            
+        </div>
+        <script type="text/javascript">            
+            const changeName = document.getElementById("changeName")
+            const titleName = document.getElementById("congratulationMessageName")
+            const changeNameResult = document.getElementById("changeNameResult")
+            
+            function changeNameInDatabase(){                
+                fetch("/api/member",{
+                    method:"PATCH",
+                    headers:new Headers({'content-type': 'application/json'}),
+                    body:JSON.stringify({
+                        "name":changeName.value
+                    })
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data)
+                    if (data.ok == true){
+                        changeNameResult.innerHTML = "Update successfully"
+                        //change name on messageBoard
+                        let para = "bName"+titleName.innerHTML                       
+                        let nameRevealonMessageBoard = document.querySelectorAll('#'+para)                                            
+                        for (i = 0; i<nameRevealonMessageBoard.length;i++){
+                            nameRevealonMessageBoard[i].innerHTML = changeName.value
+                            nameRevealonMessageBoard[i].id = "bName"+changeName.value
+                        }
+                        //change name in title                        
+                        titleName.innerHTML = changeName.value 
+                    }
+                });
+                
+            }
+        </script>
+        <div class="content">
+            <form method="post" id="form1" action="/createMessage" >
+                <h3>Leave a message</h3>                 
+                    <label for="leaveMessage">Content: </label>       
+                    <input type="text" id="leaveMessage" name="leaveMessage" required >
+                    <button type="submit" id="submit" value="Submit">
+                        <p>Submit</p>
+                    </button>
+            </form>
+        </div>
+        <div class="content" id="messageBoard">
+            
+            <script type="text/javascript" >                
+                const messageList = {{messageToJS | safe}};                              
+                for (i = 0; i < Object.keys(messageList).length; i++){
+                    const textLine = document.createElement("p")
+                    // textLine.id = messageList[i].id
+                    const nameReveal = document.createElement("b")
+                    nameReveal.id = "bName"+messageList[i].name
+                    nameReveal.textContent = messageList[i].name + ":   ";
+                    const messageReveal = document.createElement("span")
+                    messageReveal.textContent = messageList[i].content;
+                    const deleteButton = document.createElement("span")
+                    deleteButton.id = messageList[i].id
+                    deleteButton.setAttribute("onclick","deleteMessage(this)")
+                    deleteButton.className = "material-symbols-outlined";
+                    deleteButton.textContent = "delete"
+                    deleteButton.style = "font-size:5px"
+                                                                                     
+                    textLine.appendChild(nameReveal);
+                    textLine.appendChild(messageReveal);
+                    //deleteButtons are added after the message created by current user
+                    const name = "{{name}}"                    
+                    if (name == messageList[i].name){
+                        textLine.appendChild(deleteButton);
+                    }
+                    document.getElementById("messageBoard").appendChild(textLine);
+                }            
+                
+                function deleteMessage(self){
+                    if (confirm("Are you sure to delete this message?")){
+                        let body = {}
+                        body.id = self.id                        
+                        fetch("/deleteMessage", {
+                            method: "POST",                            
+                            body: JSON.stringify(body)
+                            }) 
+                            .then((response) => {
+                                location.reload()
+                            })                                            
+                    }                    
+                }
+
+            </script>            
+            
+        </div>    
+    </div>
+    
+    
+    
+</body>
+</html>
